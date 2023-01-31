@@ -12,6 +12,11 @@ jobs:
       - name: 'get repo'
         id: prepautopr
         uses: actions/checkout@v3
+      - name: 'set git config'
+        shell: bash
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "{{ $GITHUB_ACTOR }}"
       - name: 'update last.updated'
         id: last-updated
         shell: bash
