@@ -7,8 +7,15 @@ jobs:
   update-last-updated-file:
     name: "Updates the last.updated file with the current date"
     runs-on: ubuntu-latest
-    if: ${{ github.repository_owner == 'gilzow' }} && ${{ github.event.pusher.name != 'GitHub Action' }}
+    if: ${{ github.repository_owner == 'gilzow' }} && ${{ github.event.commits[0].author.name != 'GitHub Action' }}
     steps:
+      - name: 'lets make sure'
+        shell: bash
+        run: |
+          author="${{ github.event.commits[0].author.name }}"
+          pusher="${{ github.event.pusher.name }}"
+          echo "::notice::The author is ${author}"
+          echo "::notice::The pusher is ${pusher}"
       - name: 'get repo'
         id: prepautopr
         uses: actions/checkout@v3
