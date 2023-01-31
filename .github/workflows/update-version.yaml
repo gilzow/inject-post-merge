@@ -2,7 +2,7 @@ name: Update last.updated
 on:
   push:
     branches:
-      - main
+      - foobar
 jobs:
   update-last-updated-file:
     name: "Updates the last.updated file with the current date"
