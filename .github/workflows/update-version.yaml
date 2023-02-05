@@ -18,6 +18,8 @@ jobs:
         run: |
           author="${{ github.event.commits[0].author.name }}"
           pusher="${{ github.event.pusher.name }}"
+          echo "::notice::Direct access? ${DEFAULT_BRANCH}"
+          echo "::notice::Or indirect access? ${{ env.DEFAULT_BRANCH }}"
           echo "::notice::The author is ${author}"
           echo "::notice::The pusher is ${pusher}"
       - name: 'get repo'
@@ -30,6 +32,29 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
+      - name: 'check for enforce admins'
+        id: check-for-admins
+        shell: bash
+        run: |
+          defaultBranch="${{ github.event.repository.default_branch }}"
+          repoName="${{ github.event.repository.name }}"
+          repoOwner="${{ github.repository_owner }}"
+          enforceAdmins=$(gh api "/repos/${{ env.GITHUB_REPOSITORY }}/branches/${DEFAULT_BRANCH}/protection/enforce_admins" --jq '.enabled')
+          echo "enforce_admins=${enforceAdmins}" >> $GITHUB_OUTPUT
+      - name: 'disable enforce admins'
+        id: 'disable-force-admins'
+        # we need to temporarily disable the enforce admins settings so we can put the version update
+        if: ${{ 'true' == steps.check-for-admins.outputs.enforce_admins }}
+        shell: bash
+        run: |
+          echo "::notice::Enforce Admins is enabled. Temporarily disabling..."
+        # ❯ gh api \
+        #  --method POST \
+        #  -H "Accept: application/vnd.github+json" \
+        #  /repos/gilzow/inject-post-merge/branches/main/protection/enforce_admins
+          gh api --method DELETE "/repos/${{ env.GITHUB_REPOSITORY }}/branches/${DEFAULT_BRANCH}/protection/enforce_admins" \
+               && echo "::notice::Enforce admin disabled" \
+               || echo "::error::Disabling enforce admin failed"
       - name: 'update last.updated'
         id: last-updated
         shell: bash
