@@ -50,7 +50,7 @@ jobs:
         shell: bash
         run: |
           echo "::notice::Enforce Admins is enabled. Temporarily disabling..."
-          gh api --method DELETE "/repos/${{ env.GITHUB_REPOSITORY }}/branches/${DEFAULT_BRANCH}/protection/enforce_admins" \
+          gh api --method DELETE "/repos/${GITHUB_REPOSITORY}/branches/${DEFAULT_BRANCH}/protection/enforce_admins" \
                && echo "::notice::Enforce admin disabled" \
                || echo "::error::Disabling enforce admin failed"
 
@@ -70,6 +70,6 @@ jobs:
         run: |
           gh api --method POST \
           -H "Accept: application/vnd.github+json" \
-          "/repos/${{ env.GITHUB_REPOSITORY }}/branches/${DEFAULT_BRANCH}/protection/enforce_admins" \
+          "/repos/${GITHUB_REPOSITORY}/branches/${DEFAULT_BRANCH}/protection/enforce_admins" \
           && echo "::notice::Successfully re-enabled enforce admin"
           || echo "::error::Re-enabling enforce admins failed."
