@@ -37,11 +37,11 @@ jobs:
         shell: bash
         run: |
           enforceAdmins=$(gh api "/repos/${{ env.GITHUB_REPOSITORY }}/branches/${DEFAULT_BRANCH}/protection/enforce_admins" --jq '.enabled')
-          echo "::set-output name=enforce_admins::${enforceAdmins}"
+          echo "::set-output name=ENAD::${enforceAdmins}"
       - name: 'disable enforce admins'
         id: 'disable-force-admins'
         # we need to temporarily disable the enforce admins settings so we can put the version update
-        if: ${{ 'true' == steps.check-for-admins.outputs.enforce_admins }}
+        if: ${{ 'true' == steps.check-for-admins.outputs.ENAD }}
         shell: bash
         run: |
           echo "::notice::Enforce Admins is enabled. Temporarily disabling..."
@@ -63,7 +63,7 @@ jobs:
 
       - name: "Re-enable enforce admins"
         id: re-enable-enforce-admin
-        if: ${{ 'true' == steps.check-for-admins.outputs.enforce_admins }}
+        if: ${{ 'true' == steps.check-for-admins.outputs.ENAD }}
         shell: bash
         run: |
           gh api --method POST \
