@@ -36,12 +36,7 @@ jobs:
         id: check-for-admins
         shell: bash
         run: |
-          defaultBranch="${{ github.event.repository.default_branch }}"
-          repoName="${{ github.event.repository.name }}"
-          repoOwner="${{ github.repository_owner }}"
-          # enforceAdmins="false"
           enforceAdmins=$(gh api "/repos/${{ env.GITHUB_REPOSITORY }}/branches/${DEFAULT_BRANCH}/protection/enforce_admins" --jq '.enabled')
-          # echo "enforce_admins=${enforceAdmins}" >> $GITHUB_OUTPUT
           echo "::set-output name=enforce_admins::${enforceAdmins}"
       - name: 'disable enforce admins'
         id: 'disable-force-admins'
