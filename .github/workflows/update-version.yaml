@@ -6,6 +6,7 @@ on:
 
 env:
   DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+  GH_TOKENS: ${{ secrets.GH_TOKEN }}
 
 jobs:
   update-last-updated-file:
@@ -26,7 +27,7 @@ jobs:
         id: prepautopr
         uses: actions/checkout@v3
         with:
-          token: ${{secrets.GH_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
 
       - name: 'set git config'
         shell: bash
