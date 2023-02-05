@@ -23,6 +23,8 @@ jobs:
           echo "::notice::Or indirect access? ${{ env.DEFAULT_BRANCH }}"
           echo "::notice::The author is ${author}"
           echo "::notice::The pusher is ${pusher}"
+          echo "::what about repo direct? ${GITHUB_REPOSITORY}"
+          echo "::what about indirect? ${{ env.GITHUB_REPOSITORY }}"
       - name: 'get repo'
         id: prepautopr
         uses: actions/checkout@v3
