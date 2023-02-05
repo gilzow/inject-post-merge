@@ -33,11 +33,6 @@ jobs:
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
 
-      - name: 'check for enforce admins'
-        id: check-for-admins
-        shell: bash
-        run: |
-          echo "::notice::WHY DOES GITHUB SUCK SO MUCH???"
       - name: 'disable enforce admins'
         id: 'disable-force-admins'
         # we need to temporarily disable the enforce admins settings so we can put the version update
