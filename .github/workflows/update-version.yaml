@@ -32,11 +32,11 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
+
       - name: 'check for enforce admins'
         id: check-for-admins
         shell: bash
         run: |
-          enforceAdmins=$(gh api "/repos/${{ env.GITHUB_REPOSITORY }}/branches/${DEFAULT_BRANCH}/protection/enforce_admins" --jq '.enabled')
           echo "::notice::WHY DOES GITHUB SUCK SO MUCH???"
       - name: 'disable enforce admins'
         id: 'disable-force-admins'
