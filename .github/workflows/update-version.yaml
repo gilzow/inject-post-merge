@@ -62,5 +62,15 @@ jobs:
           date > last.updated
           git add last.updated
           git commit -m "auto-updates version, post merge"
-          git push origin main
+          git push origin "${DEFAULT_BRANCH}"
 
+      - name: "Re-enable enforce admins"
+        id: re-enable-enforce-admin
+        if: ${{ 'true' == steps.check-for-admins.outputs.enforce_admins }}
+        shell: bash
+        run: |
+          gh api --method POST \
+          -H "Accept: application/vnd.github+json" \
+          "/repos/${{ env.GITHUB_REPOSITORY }}/branches/${DEFAULT_BRANCH}/protection/enforce_admins" \
+          && echo "::notice::Successfully re-enabled enforce admin"
+          || echo "::error::Re-enabling enforce admins failed."
