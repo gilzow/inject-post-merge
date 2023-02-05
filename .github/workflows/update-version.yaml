@@ -37,7 +37,7 @@ jobs:
         shell: bash
         run: |
           enforceAdmins=$(gh api "/repos/${{ env.GITHUB_REPOSITORY }}/branches/${DEFAULT_BRANCH}/protection/enforce_admins" --jq '.enabled')
-          echo "::set-output name=ENAD::${enforceAdmins}"
+          echo "::notice::WHY DOES GITHUB SUCK SO MUCH???"
       - name: 'disable enforce admins'
         id: 'disable-force-admins'
         # we need to temporarily disable the enforce admins settings so we can put the version update
