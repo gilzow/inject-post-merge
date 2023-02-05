@@ -40,7 +40,7 @@ jobs:
         id: 'check-for-enforce'
         shell: bash
         run: |
-          enforceAdmins=$(gh api "/repos/${{ env.GITHUB_REPOSITORY }}/branches/${DEFAULT_BRANCH}/protection/enforce_admins" --jq '.enabled')
+          enforceAdmins=$(gh api "/repos/${GITHUB_REPOSITORY}/branches/${DEFAULT_BRANCH}/protection/enforce_admins" --jq '.enabled')
           echo "enforce_admin=${enforceAdmin}" >> $GITHUB_OUTPUT
 
       - name: 'disable enforce admins'
