@@ -27,26 +27,29 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{secrets.GH_TOKEN }}
+
       - name: 'set git config'
         shell: bash
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
+      - name: 'check for enforce admins'
+        id: 'check-for-enforce'
+        shell: bash
+        run: |
+          enforceAdmins=$(gh api "/repos/${{ env.GITHUB_REPOSITORY }}/branches/${DEFAULT_BRANCH}/protection/enforce_admins" --jq '.enabled')
+          echo "enforce_admin=${enforceAdmin}" >> $GITHUB_OUTPUT
 
       - name: 'disable enforce admins'
         id: 'disable-force-admins'
-        # we need to temporarily disable the enforce admins settings so we can put the version update
-        if: ${{ 'true' == steps.check-for-admins.outputs.ENAD }}
+        if: ${{ 'true' == steps.check-for-enforce.outputs.enforce_admin }}
         shell: bash
         run: |
           echo "::notice::Enforce Admins is enabled. Temporarily disabling..."
-        # ❯ gh api \
-        #  --method POST \
-        #  -H "Accept: application/vnd.github+json" \
-        #  /repos/gilzow/inject-post-merge/branches/main/protection/enforce_admins
           gh api --method DELETE "/repos/${{ env.GITHUB_REPOSITORY }}/branches/${DEFAULT_BRANCH}/protection/enforce_admins" \
                && echo "::notice::Enforce admin disabled" \
                || echo "::error::Disabling enforce admin failed"
+
       - name: 'update last.updated'
         id: last-updated
         shell: bash
@@ -58,7 +61,7 @@ jobs:
 
       - name: "Re-enable enforce admins"
         id: re-enable-enforce-admin
-        if: ${{ 'true' == steps.check-for-admins.outputs.ENAD }}
+        if: ${{ 'true' == steps.check-for-enforce.outputs.enforce_admin }}
         shell: bash
         run: |
           gh api --method POST \
