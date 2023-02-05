@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - main
+
+env:
+  DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+
 jobs:
   update-last-updated-file:
     name: "Updates the last.updated file with the current date"
