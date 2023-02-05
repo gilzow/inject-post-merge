@@ -71,5 +71,5 @@ jobs:
           gh api --method POST \
           -H "Accept: application/vnd.github+json" \
           "/repos/${GITHUB_REPOSITORY}/branches/${DEFAULT_BRANCH}/protection/enforce_admins" \
-          && echo "::notice::Successfully re-enabled enforce admin"
+          && echo "::notice::Successfully re-enabled enforce admin" \
           || echo "::error::Re-enabling enforce admins failed."
